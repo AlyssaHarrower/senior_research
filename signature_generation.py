@@ -10,15 +10,19 @@ r = open('test2.exe', 'b+r')
 filedata2 = str(r.read())
 r.close()
 
+#converts to binary
 filebin = ''.join(format(ord(i), '08b') for i in filedata)
 filebin2 = ''.join(format(ord(i), '08b') for i in filedata2)
 
-#stand-in to test program
-#test1 = '01111011110101'
-#test2 = '0111100000101010'
+#Find longest matching sequence between both files
+match = SequenceMatcher(None,filebin,filebin2).find_longest_match()
 
-#match = SequenceMatcher(None,filebin,filebin2).find_longest_match()
+#Prints matching sequence and length
+print(match) 
+print(filebin[match.a:match.a + match.size])  
+print(filebin2[match.b:match.b + match.size])
 
-#print(match)  # -> Match(a=0, b=15, size=9)
-#print(filebin[match.a:match.a + match.size])  # -> 011110
-#print(filebin2[match.b:match.b + match.size])  # -> 011110
+#creates a file to store signature
+s = open("BinSignature.txt", "w")
+s.write(filebin[match.a:match.a + match.size])
+s.close()
